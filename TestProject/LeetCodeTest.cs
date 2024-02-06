@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,8 @@ namespace TestProject
             //var result = LengthOfLongestSubstring("pwwkew");
             //var result = FindMedianSortedArrays(new int[] { 11, 13 },new int[] {12});
             //var result = LongestPalindrome("abaccccqwerewq");
+            //var result = ConvertFun("PAYPALISHIRING", 3);
+            //var result = ReverseFun(120);
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -198,7 +201,7 @@ namespace TestProject
                 if (!charIndexMap.Contains(s[right]))
                 {
                     charIndexMap.Add(s[right]);
-                    maxLength=Math.Max(maxLength, right-left+1);
+                    maxLength = Math.Max(maxLength, right - left + 1);
                     right++;
                 }
                 //遇到重覆字符則移除左邊一格
@@ -358,6 +361,255 @@ namespace TestProject
             }
             // 返回回文串的部分字符串
             return s.Substring(left + 1, right - left - 1);
+        }
+
+        //6. Zigzag Conversion 鋸齒文字
+        //Medium
+        //Topics
+        //Companies
+        //The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+
+        //P   A   H   N
+        //A P L S I I G
+        //Y   I   R
+        //And then read line by line: "PAHNAPLSIIGYIR"
+
+        //Write the code that will take a string and make this conversion given a number of rows:
+
+        //string convert(string s, int numRows);
+
+
+        //Example 1:
+        //Input: s = "PAYPALISHIRING", numRows = 3
+        //Output: "PAHNAPLSIIGYIR"
+
+        //Example 2:
+        //Input: s = "PAYPALISHIRING", numRows = 4
+        //Output: "PINALSIGYAHRPI"
+        //Explanation:
+        //P     I    N
+        //A   L S  I G
+        //Y A   H R
+        //P     I
+
+        //Example 3:
+        //Input: s = "A", numRows = 1
+        //Output: "A"
+
+        //Constraints:
+
+        //1 <= s.length <= 1000
+        //s consists of English letters(lower-case and upper-case), ',' and '.'.
+        //1 <= numRows <= 1000
+
+        //自解
+        //public string ConvertFun(string s, int numRows)
+        //{
+        //    if (numRows <= 1)
+        //        return s;
+        //    string result = string.Empty;
+        //    Dictionary<Tuple<int,int>, char> points = new Dictionary<Tuple<int, int>, char>();
+        //    bool isUp = false;
+        //    int x = 0;
+        //    int y = 0;
+        //    int maxy = 0;
+        //    for (int i=0;i< s.Length; i++)
+        //    {
+        //        points.Add(Tuple.Create(x,y), s[i]);
+
+        //        if (i % (numRows-1) == 0 && i != 0)
+        //        {
+        //            isUp = !isUp;
+        //        }
+
+        //        if (isUp)
+        //        {
+        //            x++;
+        //            y--;
+        //        }
+        //        else
+        //        {
+        //            y++;
+        //            maxy++;
+        //        }
+        //    }
+
+        //    for (int j = 0; j <= maxy; j++)
+        //    {
+        //        for(int i = 0; i <= x; i++)
+        //        {
+        //            if(points.ContainsKey(Tuple.Create(i,j)))
+        //            {
+        //               result += points[Tuple.Create(i, j)].ToString();
+        //            }                   
+        //        }
+        //    }
+        //    return result;
+        //}
+
+        //Solution 2 GPT
+        //
+        //public static string ConvertFun(string s, int numRows)
+        //{
+        //    if (numRows == 1 || numRows >= s.Length)
+        //    {
+        //        return s;
+        //    }
+
+        //    StringBuilder[] rows = new StringBuilder[numRows];
+        //    for (int i = 0; i < numRows; i++)
+        //    {
+        //        rows[i] = new StringBuilder();
+        //    }
+
+        //    int index = 0;
+        //    int direction = 1;
+
+        //    foreach (char c in s)
+        //    {
+        //        rows[index].Append(c);
+
+        //        if (index == 0)
+        //        {
+        //            direction = 1;
+        //        }
+        //        else if (index == numRows - 1)
+        //        {
+        //            direction = -1;
+        //        }
+
+        //        index += direction;
+        //    }
+
+        //    StringBuilder result = new StringBuilder();
+        //    foreach (var row in rows)
+        //    {
+        //        result.Append(row);
+        //    }
+
+        //    return result.ToString();
+        //}
+
+        //Solution 3 用GPT方法改編
+        public static string ConvertFun(string s, int numRows)
+        {
+            string result = string.Empty;
+            int index = 0;
+            string[] array = new string[numRows];
+            bool isDown = true;
+            foreach (var c in s)
+            {
+                array[index] += c.ToString();
+                if (isDown)
+                {
+                    index++;
+                }
+                else
+                {
+                    index--;
+                }
+                if (index == 0 || index == numRows - 1)
+                    isDown = !isDown;
+            }
+            foreach (var a in array)
+            {
+                result += a;
+            }
+            return result;
+        }
+
+        //7. Reverse Integer 反轉數字
+        //Medium
+        //Topics
+        //Companies
+        //Given a signed 32-bit integer x, return x with its digits reversed.If reversing x causes the value to go outside the signed 32-bit integer range[-231, 231 - 1], then return 0.
+
+        //Assume the environment does not allow you to store 64-bit integers(signed or unsigned).
+
+
+
+        //Example 1:
+
+        //Input: x = 123
+        //Output: 321
+        //Example 2:
+
+        //Input: x = -123
+        //Output: -321
+        //Example 3:
+
+        //Input: x = 120
+        //Output: 21
+
+
+        //GPT
+        //public int ReverseFun(int x)
+        //{
+        //    // 处理特殊情况 int.MinValue
+        //    if (x == int.MinValue)
+        //    {
+        //        return 0;
+        //    }
+
+        //    // 将整数转换为字符串
+        //    string numString = Math.Abs(x).ToString();
+        //    // 利用 StringBuilder 存储反转后的字符串
+        //    StringBuilder reversedString = new StringBuilder();
+
+        //    // 反转字符串
+        //    for (int i = numString.Length - 1; i >= 0; i--)
+        //    {
+        //        reversedString.Append(numString[i]);
+        //    }
+
+        //    // 尝试将反转后的字符串转换为长整数
+        //    long reversed;
+        //    if (long.TryParse(reversedString.ToString(), out reversed))
+        //    {
+        //        // 若原数字为负数，则反转后也是负数
+        //        if (x < 0)
+        //        {
+        //            reversed *= -1;
+        //        }
+        //        // 检查是否溢出 int 范围
+        //        if (reversed > int.MaxValue || reversed < int.MinValue)
+        //        {
+        //            return 0;
+        //        }
+        //        return (int)reversed;
+        //    }
+        //    else
+        //    {
+        //        // 转换失败，说明溢出了，返回0
+        //        return 0;
+        //    }
+        //}
+
+        //自解
+        public int ReverseFun(int x)
+        {
+            try
+            {
+                string result = string.Empty;
+                string numString = x.ToString();
+                string dight = string.Empty;
+                int variable = 0;
+                if (numString[0] == '-')
+                {
+                    dight = "-";
+                    variable = 1;
+                }
+                for (int i = numString.Length - 1; i >= 0 + variable; i--)
+                {
+                    result += numString[i];
+                }
+                result = dight + result;
+                return Convert.ToInt32(result);
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
         }
     }
 }
