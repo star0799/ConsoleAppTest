@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TestProject.Model;
 
@@ -26,6 +27,9 @@ namespace TestProject
             //var result = LongestPalindrome("abaccccqwerewq");
             //var result = ConvertFun("PAYPALISHIRING", 3);
             //var result = ReverseFun(120);
+            //var result = MyAtoi("a          -852166    ");
+            //var result = IsPalindrome(122);
+            var result = IsMatch("aa", "a");
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -610,6 +614,255 @@ namespace TestProject
             {
                 return 0;
             }
+        }
+
+        // 8. String to Integer(atoi)
+        //Medium
+        //Topics
+        //Companies
+        //Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer(similar to C/C++'s atoi function).
+
+        //The algorithm for myAtoi(string s) is as follows:
+
+        //Read in and ignore any leading whitespace.
+        //Check if the next character (if not already at the end of the string) is '-' or '+'. Read this character in if it is either.This determines if the final result is negative or positive respectively. Assume the result is positive if neither is present.
+        //Read in next the characters until the next non-digit character or the end of the input is reached.The rest of the string is ignored.
+        //Convert these digits into an integer (i.e. "123" -> 123, "0032" -> 32). If no digits were read, then the integer is 0. Change the sign as necessary (from step 2).
+        //If the integer is out of the 32-bit signed integer range[-231, 231 - 1], then clamp the integer so that it remains in the range.Specifically, integers less than -231 should be clamped to -231, and integers greater than 231 - 1 should be clamped to 231 - 1.
+        //Return the integer as the final result.
+        //Note:
+
+
+        //Only the space character ' ' is considered a whitespace character.
+        //Do not ignore any characters other than the leading whitespace or the rest of the string after the digits.
+
+
+
+        //Example 1:
+
+
+        //Input: s = "42"
+        //Output: 42
+        //Explanation: The underlined characters are what is read in, the caret is the current reader position.
+        //Step 1: "42" (no characters read because there is no leading whitespace)
+        //         ^
+        //Step 2: "42" (no characters read because there is neither a '-' nor '+')
+        //         ^
+        //Step 3: "42" ("42" is read in)
+        //           ^
+        //The parsed integer is 42.
+        //Since 42 is in the range[-231, 231 - 1], the final result is 42.
+        //Example 2:
+
+        //Input: s = "   -42"
+        //Output: -42
+        //Explanation:
+        //Step 1: "   -42" (leading whitespace is read and ignored)
+        //            ^
+        //Step 2: "   -42" ('-' is read, so the result should be negative)
+        //             ^
+        //Step 3: "   -42" ("42" is read in)
+        //               ^
+        //The parsed integer is -42.
+        //Since -42 is in the range[-231, 231 - 1], the final result is -42.
+        //Example 3:
+
+        //Input: s = "4193 with words"
+        //Output: 4193
+        //Explanation:
+        //Step 1: "4193 with words" (no characters read because there is no leading whitespace)
+        //         ^
+        //Step 2: "4193 with words" (no characters read because there is neither a '-' nor '+')
+        //         ^
+        //Step 3: "4193 with words" ("4193" is read in; reading stops because the next character is a non-digit)
+        //             ^
+        //The parsed integer is 4193.
+        //Since 4193 is in the range[-231, 231 - 1], the final result is 4193.
+
+
+
+        //Constraints:
+
+        //0 <= s.length <= 200
+        //s consists of English letters(lower-case and upper-case), digits(0-9), ' ', '+', '-', and '.'.
+
+        //自解
+        //public int MyAtoi(string s)
+        //{
+        //    string result = string.Empty;
+        //    s = s.Trim();
+        //    if (string.IsNullOrEmpty(s))
+        //        return 0;
+        //    int dight = 1;
+        //    int start = 0;
+        //    if (s == "+")
+        //        return 0;
+        //    else if (s == "-")
+        //        return 0;
+        //    if (s[0] == '+')
+        //    {
+        //        start = 1;
+        //    }
+        //    else if (s[0] == '-')
+        //    {
+        //        start = 1;
+        //        dight = -1;
+        //    }
+        //    try
+        //    {
+        //        for (int i = start; i < s.Length; i++)
+        //        {
+        //            int o = 0;
+        //            if (int.TryParse(s[i].ToString(), out o))
+        //            {
+        //                result += o;
+        //            }
+        //            else
+        //            {
+        //                if (result.Trim() == "")
+        //                    return 0;
+        //                else
+        //                    break;
+        //            }
+        //        }
+        //        return dight * Convert.ToInt32(result);
+        //    }
+        //    catch
+        //    {
+        //        if (dight == -1)
+        //            return int.MinValue;
+        //        else
+        //            return int.MaxValue;
+        //    }
+        //}
+
+        //佳解。參考LeetCode
+        public int MyAtoi(string s)
+        {
+            s = s.Trim();
+            if (string.IsNullOrEmpty(s)) return 0;
+            int sign = 1; long num = 0;
+            int i = 0;
+            if (s[i] == '+' || s[i] == '-')
+            {
+                sign = s[i++] == '-' ? -1 : 1;
+            }
+
+            for (; i < s.Length && Char.IsDigit(s[i]); i++)
+            {
+                num = num * 10 + s[i] - '0';
+                if (num * sign >= int.MaxValue) return int.MaxValue;
+                else if (num * sign <= int.MinValue) return int.MinValue;
+            }
+            return (int)(num * sign);
+        }
+
+        //9. Palindrome Number 判斷數字是否回文
+        //Easy
+        //Topics
+        //Companies
+        //Hint
+        //Given an integer x, return true if x is a
+        //palindrome
+        //, and false otherwise.
+
+        //Example 1:
+        //Input: x = 121
+        //Output: true
+        //Explanation: 121 reads as 121 from left to right and from right to left.
+
+        //Example 2:
+        //Input: x = -121
+        //Output: false
+        //Explanation: From left to right, it reads -121. From right to left, it becomes 121-. Therefore it is not a palindrome.
+
+        //Example 3:
+        //Input: x = 10
+        //Output: false
+        //Explanation: Reads 01 from right to left.Therefore it is not a palindrome.
+
+        //Constraints:
+
+        //-231 <= x <= 231 - 1
+        //自解
+        //public bool IsPalindrome(int x)
+        //{
+        //    string temp =x.ToString();
+        //    string palindromeString = string.Empty;
+        //    int i = 0;
+        //    if (temp[i]=='-')
+        //    {
+        //        return false;
+        //    }
+        //    for (i= temp.Length-1; i >= 0; i--)
+        //    {
+        //        palindromeString += temp[i];
+        //    }
+        //    if (palindromeString == x.ToString())
+        //        return true;
+        //    else
+        //        return false;                   
+        //}
+        //參考
+        //public bool IsPalindrome(int x)
+        //{
+        //    string original = x.ToString();
+        //    char[] xArrayToReverse = original.ToCharArray();
+        //    Array.Reverse(xArrayToReverse);
+        //    string reversed = new string(xArrayToReverse);
+
+        //    return reversed.Equals(original) ? true : false;
+        //}
+
+        //最佳解。參考修改
+        public bool IsPalindrome(int x)
+        {
+            var reverseString = new string(x.ToString().ToCharArray().Reverse().ToArray());
+            return x.ToString() == reverseString;
+        }
+
+        //10. Regular Expression Matching 正規表達式搜尋
+        //Hard
+        //Topics
+        //Companies
+        //Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
+
+        //'.' Matches any single character.​​​​
+        //'*' Matches zero or more of the preceding element.
+        //The matching should cover the entire input string (not partial).
+
+        //Example 1:
+
+        //Input: s = "aa", p = "a"
+        //Output: false
+        //Explanation: "a" does not match the entire string "aa".
+        //Example 2:
+
+        //Input: s = "aa", p = "a*"
+        //Output: true
+        //Explanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
+        //Example 3:
+
+        //Input: s = "ab", p = ".*"
+        //Output: true
+        //Explanation: ".*" means "zero or more (*) of any character (.)".
+
+        //Constraints:
+
+        //1 <= s.length <= 20
+        //1 <= p.length <= 20
+        //s contains only lowercase English letters.
+        //p contains only lowercase English letters, '.', and '*'.
+        //It is guaranteed for each appearance of the character '*', there will be a previous valid character to match.
+
+        //參考。使用正規表示式
+        public bool IsMatch(string s, string p)
+        {
+            if (p.Contains("**"))
+            {
+                return Regex.IsMatch(s, String.Format("^{0}$", Regex.Replace(p, "[**]+", "*")));
+            }
+            return Regex.IsMatch(s, String.Format("^{0}$", p));
         }
     }
 }
