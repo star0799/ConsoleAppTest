@@ -29,7 +29,8 @@ namespace TestProject
             //var result = ReverseFun(120);
             //var result = MyAtoi("a          -852166    ");
             //var result = IsPalindrome(122);
-            var result = IsMatch("aa", "a");
+            //var result = IsMatch("aa", "a");           
+            var result = MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -864,5 +865,70 @@ namespace TestProject
             }
             return Regex.IsMatch(s, String.Format("^{0}$", p));
         }
+        //11. Container With Most Water 裝最多水的容器
+        //Medium
+        //Topics
+        //Companies
+        //Hint
+        //You are given an integer array height of length n.There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and(i, height[i]).
+
+        //Find two lines that together with the x-axis form a container, such that the container contains the most water.
+
+        //Return the maximum amount of water a container can store.
+
+        //Notice that you may not slant the container.
+
+        //Example 1:
+        //Input: height = [1, 8, 6, 2, 5, 4, 8, 3, 7]
+        //Output: 49
+        //Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
+
+        //Example 2:
+        //Input: height = [1, 1]
+        //Output: 1
+
+        //自解超時
+        //public int MaxArea(int[] height)
+        //{
+        //    int max = 0;
+        //    for(int i = 0; i < height.Length; i++)
+        //    {
+        //        for(int j = i + 1; j < height.Length; j++)
+        //        {
+        //           int y = Math.Min(height[i], height[j]);
+        //           int x = j - i;
+        //            if (x * y > max)
+        //            {
+        //                max = x * y;
+        //            }
+        //        }
+        //    }
+        //    return max;
+        //}
+        public static int MaxArea(int[] height)
+        {
+            int maxArea = 0;
+            int left = 0;
+            int right = height.Length - 1;
+
+            while (left < right)
+            {
+                // 计算当前容器的容量
+                int currentArea = Math.Min(height[left], height[right]) * (right - left);
+                maxArea = Math.Max(maxArea, currentArea);
+
+                // 移动较小高度的指针
+                if (height[left] < height[right])
+                {
+                    left++;
+                }
+                else
+                {
+                    right--;
+                }
+            }
+
+            return maxArea;
+        }     
     }
 }
