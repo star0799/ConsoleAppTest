@@ -30,7 +30,8 @@ namespace TestProject
             //var result = MyAtoi("a          -852166    ");
             //var result = IsPalindrome(122);
             //var result = IsMatch("aa", "a");           
-            var result = MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
+            //var result = MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
+            //var result = IntToRoman(1994);
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -929,6 +930,94 @@ namespace TestProject
             }
 
             return maxArea;
-        }     
+        }
+
+        //12. Integer to Roman 數字轉羅馬字
+        //Medium
+        //Topics
+        //Companies
+        //Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+        //Symbol Value
+        //I             1
+        //V             5
+        //X             10
+        //L             50
+        //C             100
+        //D             500
+        //M             1000
+        //For example, 2 is written as II in Roman numeral, just two one's added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+
+        //Roman numerals are usually written largest to smallest from left to right.However, the numeral for four is not IIII. Instead, the number four is written as IV.Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX.There are six instances where subtraction is used:
+
+        //I can be placed before V (5) and X(10) to make 4 and 9. 
+        //X can be placed before L(50) and C(100) to make 40 and 90. 
+        //C can be placed before D(500) and M(1000) to make 400 and 900.
+        //Given an integer, convert it to a roman numeral.
+
+
+
+        //Example 1:
+        //Input: num = 3
+        //Output: "III"
+        //Explanation: 3 is represented as 3 ones.
+
+        //Example 2:
+        //Input: num = 58
+        //Output: "LVIII"
+        //Explanation: L = 50, V = 5, III = 3.
+        //Example 3:
+
+        //Input: num = 1994
+        //Output: "MCMXCIV"
+        //Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+
+        // GPT
+        //public string IntToRoman(int num)
+        //{
+        //    // 罗马数字的字符表示和对应的数值
+        //    string[] romanSymbols = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+        //    int[] romanValues = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+
+        //    StringBuilder roman = new StringBuilder();
+        //    int i = 0;
+
+        //    // 从最大的罗马数字开始逐步减去对应的数值
+        //    while (num > 0)
+        //    {
+        //        // 如果当前数值大于等于当前罗马数字的数值，则将对应的罗马数字加到结果中
+        //        if (num - romanValues[i] >= 0)
+        //        {
+        //            roman.Append(romanSymbols[i]);
+        //            num -= romanValues[i];
+        //        }
+        //        else // 否则继续考察下一个罗马数字
+        //        {
+        //            i++;
+        //        }
+        //    }
+
+        //    return roman.ToString();
+        //}
+        public string IntToRoman(int num)
+        {
+            string result = string.Empty;
+            string[] romanSymbols = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+            int[] romanValues = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+            int i = 0;
+            while (num > 0)
+            {
+                if (num - romanValues[i] >= 0)
+                {
+                    result += romanSymbols[i];
+                    num-=romanValues[i];
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return result;
+        }
     }
 }
