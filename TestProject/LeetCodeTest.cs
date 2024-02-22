@@ -32,6 +32,9 @@ namespace TestProject
             //var result = IsMatch("aa", "a");           
             //var result = MaxArea(new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 });
             //var result = IntToRoman(1994);
+            //var result = RomanToInt("IV");
+            //var result = LongestCommonPrefix(new string[] { "ab", "a" });
+            var result = ThreeSum(new int[] { -1, 0, 1, 2, -1, -4 });
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1010,11 +1013,246 @@ namespace TestProject
                 if (num - romanValues[i] >= 0)
                 {
                     result += romanSymbols[i];
-                    num-=romanValues[i];
+                    num -= romanValues[i];
                 }
                 else
                 {
                     i++;
+                }
+            }
+            return result;
+        }
+        //13. Roman to Integer 羅馬字轉數字
+        //Easy
+        //Topics
+        //Companies
+        //Hint
+        //Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+        //Symbol Value
+        //I             1
+        //V             5
+        //X             10
+        //L             50
+        //C             100
+        //D             500
+        //M             1000
+        //For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II.The number 27 is written as XXVII, which is XX + V + II.
+
+        //Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV.Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX.There are six instances where subtraction is used:
+
+        //I can be placed before V (5) and X(10) to make 4 and 9. 
+        //X can be placed before L(50) and C(100) to make 40 and 90. 
+        //C can be placed before D(500) and M(1000) to make 400 and 900.
+        //Given a roman numeral, convert it to an integer.
+
+        //Example 1:
+        //Input: s = "III"
+        //Output: 3
+        //Explanation: III = 3.
+
+        //Example 2:
+        //Input: s = "LVIII"
+        //Output: 58
+        //Explanation: L = 50, V= 5, III = 3.
+        //Example 3:
+
+        //Input: s = "MCMXCIV"
+        //Output: 1994
+        //Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+
+        //GPT
+        //public int RomanToInt(string s)
+        //{
+        //    Dictionary<char, int> romanMap = new Dictionary<char, int>
+        //     {
+        //         {'I', 1},
+        //         {'V', 5},
+        //         {'X', 10},
+        //         {'L', 50},
+        //         {'C', 100},
+        //         {'D', 500},
+        //         {'M', 1000}
+        //     };
+
+        //    int result = 0;
+
+        //    for (int i = 0; i < s.Length; i++)
+        //    {
+        //        if (i < s.Length - 1 && romanMap[s[i]] < romanMap[s[i + 1]])
+        //        {
+        //            result -= romanMap[s[i]];
+        //        }
+        //        else
+        //        {
+        //            result += romanMap[s[i]];
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
+        //自解  
+        public int RomanToInt(string s)
+        {
+            int result = 0;
+            string[] romanSymbols = { "CM", "M", "CD", "D", "XC", "C", "XL", "L", "IX", "X", "IV", "V", "I" };
+            int[] romanValues = { 900, 1000, 400, 500, 90, 100, 40, 50, 9, 10, 4, 5, 1 };
+
+            int i = 0;
+            while (s != "")
+            {
+                if (s.Contains(romanSymbols[i]))
+                {
+                    result += romanValues[i];
+                    s = s.Remove(s.IndexOf(romanSymbols[i]), romanSymbols[i].Length);
+                }
+                else
+                    i++;
+            }
+            return result;
+        }
+
+        //14. Longest Common Prefix
+        //Write a function to find the longest common prefix string amongst an array of strings.
+
+        //If there is no common prefix, return an empty string "".
+
+        //Example 1:
+        //Input: strs = ["flower", "flow", "flight"]
+        //Output: "fl"
+
+        //Example 2:
+        //Input: strs = ["dog", "racecar", "car"]
+        //Output: ""
+        //Explanation: There is no common prefix among the input strings.
+
+        //Constraints:
+
+        //1 <= strs.length <= 200
+        //0 <= strs[i].length <= 200
+        //strs[i] consists of only lowercase English letters.
+
+        //自解
+        //public string LongestCommonPrefix(string[] strs)
+        //{
+        //    string result=string.Empty;
+        //    if(strs.Length==0 || string.IsNullOrEmpty(strs[0]))
+        //        return result;
+        //    string first = strs[0];
+        //    for(int i = 0; i < first.Length; i++)
+        //    {
+        //        for(int j = 0; j < strs.Length; j++)
+        //        {
+        //            try
+        //            {
+        //                if (first[i] != strs[j][i])
+        //                    return result;
+        //                if (j == strs.Length - 1)
+        //                    result += first[i];
+        //            }
+        //            catch
+        //            {
+        //                return result;
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+
+        //LC
+        public string LongestCommonPrefix(string[] strs)
+        {
+            int minLength = strs.Min(x => x.Length);
+            string commonPrefix = "";
+            for (int i = 0; i < minLength; i++)
+            {
+                char commonChar = strs[0][i];
+                bool charEquals = true;
+                for (int j = 1; j < strs.Length; j++)
+                {
+                    if (strs[j][i] != commonChar)
+                    {
+                        charEquals = false;
+                        break;
+                    }
+                }
+
+                if (charEquals)
+                {
+                    commonPrefix += commonChar;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return commonPrefix;
+        }
+
+        //15. 3Sum 取出陣列內三數相加等於0的結果
+        //Medium
+        //Topics
+        //Companies
+        //Hint
+        //Given an integer array nums, return all the triplets[nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+        //Notice that the solution set must not contain duplicate triplets.
+
+        //Example 1:
+        //Input: nums = [-1, 0, 1, 2, -1, -4]
+        //Output: [[-1,-1,2], [-1,0,1]]
+        //Explanation: 
+        //nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+        //nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+        //nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+        //The distinct triplets are[-1, 0, 1] and[-1, -1, 2].
+        //Notice that the order of the output and the order of the triplets does not matter.
+
+        //Example 2:
+        //Input: nums = [0, 1, 1]
+        //Output: []
+        //Explanation: The only possible triplet does not sum up to 0.
+
+        //Example 3:
+        //Input: nums = [0, 0, 0]
+        //Output: [[0,0,0]]
+        //Explanation: The only possible triplet sums up to 0.
+
+
+        //Constraints:
+
+        //3 <= nums.length <= 3000
+        //-105 <= nums[i] <= 105
+
+        public IList<IList<int>> ThreeSum(int[] nums)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            HashSet<string> set = new HashSet<string>();
+            Array.Sort(nums);
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int left = i + 1;
+                int right = nums.Length - 1;
+                while (left < right)
+                {
+                    int sum = nums[i] + nums[left] + nums[right];
+                    if (sum == 0)
+                    {
+                        string sumText = $"{nums[i]},{nums[left]},{nums[right]}";
+                        if (set.Add(sumText))
+                            result.Add(new List<int> { nums[i], nums[left], nums[right] });
+                        left++;
+                        right--;
+                    }
+                    else if (sum < 0)
+                    {
+                        left++;
+                    }
+                    else
+                    {
+                        right--;
+                    }
                 }
             }
             return result;
