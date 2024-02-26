@@ -18,9 +18,7 @@ namespace TestProject
             //int[]取出兩個值相加為target最後回傳Index  ex. { 2, 7, 11, 14, 13, 196, 15 } , 26
             //11+15=26所以回傳2,6
             //var result = TwoSum(new int[] { 2, 7, 11, 14, 13, 196, 15 }, 26);
-
             //Merge(new int[] { 1, 2, 3, 0, 0, 0 }, 3, new int[] { 2, 5, 6 }, 3);
-
             //var result= AddTwoNumbers(new ListNode { val=2,next= new ListNode { val=4,next =new ListNode {val= 3,next=null} } }, new ListNode { val = 5, next = new ListNode { val = 6, next = new ListNode { val = 8, next= new ListNode { val = 9, next = null } } } });
             //var result = LengthOfLongestSubstring("pwwkew");
             //var result = FindMedianSortedArrays(new int[] { 11, 13 },new int[] {12});
@@ -34,7 +32,9 @@ namespace TestProject
             //var result = IntToRoman(1994);
             //var result = RomanToInt("IV");
             //var result = LongestCommonPrefix(new string[] { "ab", "a" });
-            var result = ThreeSum(new int[] { -1, 0, 1, 2, -1, -4 });
+            //var result = ThreeSum(new int[] { -1, 0, 1, 2, -1, -4 });
+            //var result = ThreeSumClosest(new int[] { -1, 2, 1, -4 },1);
+            //var result = LetterCombinations("237");
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1254,6 +1254,131 @@ namespace TestProject
                         right--;
                     }
                 }
+            }
+            return result;
+        }
+
+        //16. 3Sum Closest 三個數字相加取最接近值
+        //Medium
+        //Topics
+        //Companies
+        //Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
+
+        //Return the sum of the three integers.
+
+        //You may assume that each input would have exactly one solution.
+
+        //Example 1:
+        //Input: nums = [-1,2,1,-4], target = 1
+        //Output: 2
+        //Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+        //Example 2:
+        //Input: nums = [0,0,0], target = 1
+        //Output: 0
+        //Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).
+
+        //Constraints:
+        //3 <= nums.length <= 500
+        //-1000 <= nums[i] <= 1000
+        //-104 <= target <= 104
+
+        //Test Case:
+        //[-1,2,1,-4]
+        //1
+        //[0,0,0]
+        //1
+
+        //[-4,-1,1,2] 1             0--4=4   
+        public int ThreeSumClosest(int[] nums, int target)
+        {
+            Array.Sort(nums);
+            int result = 0;
+            int distance = int.MaxValue;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int left=i + 1;
+                int right=nums.Length - 1;               
+                while(left < right)
+                {
+                    int sum =(nums[i] + nums[left] + nums[right]);
+                    if (sum-target == 0)
+                    {
+                        return target;
+                    }
+                    else if (sum - target < 0)
+                    {
+                        left++;
+                    }
+                    else
+                    {
+                        right--;
+                    }
+                    if (Math.Abs(sum - target) < distance)
+                    {
+                        distance = Math.Abs(sum - target);
+                        result = sum;
+                    }
+                }
+            }
+            return result;
+        }
+
+        //17. Letter Combinations of a Phone Number 多組英文字互碰
+        //Medium
+        //Topics
+        //Companies
+        //Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.Return the answer in any order.
+
+        //A mapping of digits to letters (just like on the telephone buttons) is given below.Note that 1 does not map to any letters.
+
+
+        //Example 1:
+        //Input: digits = "23"
+        //Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+
+        //Example 2:
+        //Input: digits = ""
+        //Output: []
+        //Example 3:
+
+        //Input: digits = "2"
+        //Output: ["a","b","c"]
+
+        //GPT
+        public IList<string> LetterCombinations(string digits)
+        {
+            Dictionary<char, string> digitToLetters = new Dictionary<char, string>
+            {
+                 {'2',"abc"},
+                 {'3',"def"},
+                 {'4',"ghi"},
+                 {'5',"jkl"},
+                 {'6',"mno"},
+                 {'7',"pqrs"},
+                 {'8',"tuv"},
+                 {'9',"wxyz"}
+            };
+            IList<string> result = new List<string>();
+            if (string.IsNullOrEmpty(digits))
+                return result;
+
+            result.Add("");
+
+            foreach (char digit in digits)
+            {
+                string letters = digitToLetters[digit];
+                IList<string> newCombinations = new List<string>();
+
+                foreach (string combination in result)
+                {
+                    foreach (char letter in letters)
+                    {
+                        newCombinations.Add(combination + letter);
+                    }
+                }
+
+                result = newCombinations;
             }
             return result;
         }
