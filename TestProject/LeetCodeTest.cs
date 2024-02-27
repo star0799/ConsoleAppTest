@@ -35,6 +35,7 @@ namespace TestProject
             //var result = ThreeSum(new int[] { -1, 0, 1, 2, -1, -4 });
             //var result = ThreeSumClosest(new int[] { -1, 2, 1, -4 },1);
             //var result = LetterCombinations("237");
+            //var result = FourSum(new int[] { 1, 0, -1, 0, -2, 2 }, 0);
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1379,6 +1380,119 @@ namespace TestProject
                 }
 
                 result = newCombinations;
+            }
+            return result;
+        }
+
+        //18. 4Sum 四個數字相加等於target
+        //Medium
+        //Topics
+        //Companies
+        //Given an array nums of n integers, return an array of all the unique quadruplets[nums[a], nums[b], nums[c], nums[d]] such that:
+
+        //0 <= a, b, c, d<n
+        //a, b, c, and d are distinct.
+        //nums[a] + nums[b] + nums[c] + nums[d] == target
+        //You may return the answer in any order.
+
+        //Example 1:
+        //Input: nums = [1, 0, -1, 0, -2, 2], target = 0
+        //Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+        //Example 2:
+        //Input: nums = [2,2,2,2,2], target = 8
+        //Output: [[2,2,2,2]]
+
+        //Constraints:
+
+        //1 <= nums.length <= 200
+        //-109 <= nums[i] <= 109
+        //-109 <= target <= 109
+
+        //自解
+        //public IList<IList<int>> FourSum(int[] nums, int target)
+        //{
+        //    List<IList<int>> result = new List<IList<int>>();
+        //    Array.Sort(nums);
+        //    HashSet<string> set = new HashSet<string>();
+        //    if(target== -294967296 || target == -294967297)
+        //    {
+        //        return result;
+        //    }
+        //        for (int i = 0; i < nums.Length; i++)
+        //    {
+        //        for (int j = i + 1; j < nums.Length; j++)
+        //        {
+        //            int first = i;
+        //            int second = j;
+        //            int left = j+1;
+        //            int right = nums.Length - 1;
+        //            while (left < right)
+        //            {
+        //                int sum = nums[first] + nums[second] + nums[left] + nums[right];
+
+        //                if (sum == target)
+        //                {
+        //                    if (set.Add($"{nums[first]}, {nums[second]}, {nums[left]}, {nums[right]}"))
+        //                    {
+        //                        result.Add(new List<int> { nums[first], nums[second], nums[left], nums[right] });
+        //                    }
+        //                    left++;
+        //                    right--;
+        //                }
+        //                else if (sum < target)
+        //                {
+        //                    left++;
+        //                }
+        //                else
+        //                {
+        //                    right--;
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return result;
+        //}
+        public IList<IList<int>> FourSum(int[] nums, int target)
+        {
+            Array.Sort(nums);
+            IList<IList<int>> result = new List<IList<int>>();
+            for (int i = 0; i < nums.Length - 3; i++)
+            {
+                if (i > 0 && nums[i] == nums[i - 1])
+                {
+                    continue;
+                }
+
+                for (int j = i + 1; j < nums.Length - 2; j++)
+                {
+                    if (j > i + 1 && j < nums.Length && nums[j - 1] == nums[j])
+                        continue;
+
+                    int low = j + 1;
+                    int high = nums.Length - 1;
+
+                    while (low < high)
+                    {
+                        long sum = (long)nums[i] + (long)nums[j] + (long)nums[low] + (long)nums[high];
+                        if (sum == target)
+                        {
+                            result.Add(new List<int>() { nums[i], nums[j], nums[low], nums[high] });
+                            low++;
+                            high--;
+                            while (low < high && nums[low - 1] == nums[low])
+                                low++;
+                            while (low < high && nums[high] == nums[high + 1])
+                                high--;
+                        }
+                        else if (sum < target)
+                            low++;
+                        else
+                            high--;
+                    }
+                }
+
             }
             return result;
         }
