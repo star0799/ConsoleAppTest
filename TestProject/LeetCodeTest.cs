@@ -36,6 +36,13 @@ namespace TestProject
             //var result = ThreeSumClosest(new int[] { -1, 2, 1, -4 },1);
             //var result = LetterCombinations("237");
             //var result = FourSum(new int[] { 1, 0, -1, 0, -2, 2 }, 0);
+            ListNode head = new ListNode(1);
+            //head.next = new ListNode(2);
+            //head.next.next = new ListNode(3);
+            //head.next.next.next = new ListNode(4);
+            //head.next.next.next.next = new ListNode(5);
+            //var result = RemoveNthFromEnd(head,1);
+            var result = IsValid("(())");
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1298,12 +1305,12 @@ namespace TestProject
             int distance = int.MaxValue;
             for (int i = 0; i < nums.Length; i++)
             {
-                int left=i + 1;
-                int right=nums.Length - 1;               
-                while(left < right)
+                int left = i + 1;
+                int right = nums.Length - 1;
+                while (left < right)
                 {
-                    int sum =(nums[i] + nums[left] + nums[right]);
-                    if (sum-target == 0)
+                    int sum = (nums[i] + nums[left] + nums[right]);
+                    if (sum - target == 0)
                     {
                         return target;
                     }
@@ -1495,6 +1502,134 @@ namespace TestProject
 
             }
             return result;
+        }
+
+        //        19. Remove Nth Node From End of List
+        //Medium
+        //Topics
+        //Companies
+        //Hint
+        //Given the head of a linked list, remove the nth node from the end of the list and return its head.
+
+        //Example 1:
+        //Input: head = [1, 2, 3, 4, 5], n = 2
+        //Output: [1,2,3,5]
+
+        //Example 2:
+        //Input: head = [1], n = 1
+        //Output: []
+
+        //Example 3:
+        //Input: head = [1, 2], n = 1
+        //Output: [1]
+
+
+        //Constraints:
+
+        //The number of nodes in the list is sz.
+        //1 <= sz <= 30
+        //0 <= Node.val <= 100
+        //1 <= n <= sz
+
+        //public ListNode RemoveNthFromEnd(ListNode head, int n)
+        //{
+        //    ListNode dummy = new ListNode(0);
+        //    dummy.next = head;
+
+        //    ListNode fast = dummy;
+        //    ListNode slow = dummy;
+
+        //    for (int i = 0; i <= n; i++)
+        //    {
+        //        fast = fast.next;
+        //    }
+
+        //    while (fast != null)
+        //    {
+        //        fast = fast.next;
+        //        slow = slow.next;
+        //    }
+
+        //    slow.next = slow.next.next;
+
+        //    return dummy.next;
+        //}
+        public ListNode RemoveNthFromEnd(ListNode head, int n)
+        {
+            int getCount = GetCount(head);
+            int GetCount(ListNode node)
+            {
+                int c = 0;
+                while (node != null)
+                {
+                    c++;
+                    node = node.next;
+                }
+                return c;
+            }
+            ListNode current = head;
+            int index = getCount - n;
+            int count = 0;
+            if (index == 0 && head.next == null)
+                return head;
+            if (index == 0)
+                return head.next;
+            while (current != null && count < index - 1)
+            {
+                current = current.next;
+                count++;
+            }
+            current.next = current.next.next;
+            return head;
+        }
+
+        //20. Valid Parentheses 驗證括號閉合 GPT
+        //Easy
+        //Topics
+        //Companies
+        //Hint
+        //Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+        //An input string is valid if:
+        //Open brackets must be closed by the same type of brackets.
+        //Open brackets must be closed in the correct order.
+        //Every close bracket has a corresponding open bracket of the same type.
+
+        //Example 1:
+        //Input: s = "()"
+        //Output: true
+
+        //Example 2:
+        //Input: s = "()[]{}"
+        //Output: true
+
+        //Example 3:
+        //Input: s = "(]"
+        //Output: false
+
+        public bool IsValid(string s)
+        {
+            Stack<char> stack = new Stack<char>();
+            foreach (char c in s)
+            {
+                if (c == '(' || c == '[' || c == '{')
+                {
+                    stack.Push(c);
+                }
+                else if (c == ')' && (stack.Count == 0 || stack.Pop() != '('))
+                {
+                    return false;
+                }
+                else if (c == ']' && (stack.Count == 0 || stack.Pop() != '['))
+                {
+                    return false;
+                }
+                else if (c == '}' && (stack.Count == 0 || stack.Pop() != '{'))
+                {
+                    return false;
+                }
+            }
+            return stack.Count == 0;
         }
     }
 }
