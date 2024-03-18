@@ -36,13 +36,15 @@ namespace TestProject
             //var result = ThreeSumClosest(new int[] { -1, 2, 1, -4 },1);
             //var result = LetterCombinations("237");
             //var result = FourSum(new int[] { 1, 0, -1, 0, -2, 2 }, 0);
-            ListNode head = new ListNode(1);
+            //ListNode head = new ListNode(1);
             //head.next = new ListNode(2);
             //head.next.next = new ListNode(3);
             //head.next.next.next = new ListNode(4);
             //head.next.next.next.next = new ListNode(5);
             //var result = RemoveNthFromEnd(head,1);
-            var result = IsValid("(())");
+            //var result = IsValid("(())");
+            var result = MergeTwoLists(new ListNode { val = 1, next = new ListNode { val = 2, next = new ListNode { val = 4, next = null } } }, new ListNode { val = 1, next = new ListNode { val = 3, next = new ListNode { val = 4, next = null } } });
+            //var result = MergeTwoLists(null, null);
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1630,6 +1632,97 @@ namespace TestProject
                 }
             }
             return stack.Count == 0;
+        }
+
+        //21. Merge Two Sorted Lists 兩個ListNode合併排序
+        //Easy
+        //Topics
+        //Companies
+        //You are given the heads of two sorted linked lists list1 and list2.
+
+        //Merge the two lists into one sorted list.The list should be made by splicing together the nodes of the first two lists.
+
+        //Return the head of the merged linked list.
+
+        //Example 1:
+        //Input: list1 = [1, 2, 4], list2 = [1, 3, 4]
+        //Output: [1,1,2,3,4,4]
+
+        //Example 2:
+        //Input: list1 = [], list2 = []
+        //Output: []
+
+        //Example 3:
+        //Input: list1 = [], list2 = [0]
+        //Output: [0]
+
+        //Constraints:
+
+        //The number of nodes in both lists is in the range [0, 50].
+        //-100 <= Node.val <= 100
+        //Both list1 and list2 are sorted in non-decreasing order.
+
+        //自解
+        //public ListNode MergeTwoLists(ListNode list1, ListNode list2)
+        //{
+        //    if(list1==null && list2==null)
+        //        return null; 
+        //    List<int> getList(ListNode node)
+        //    {
+        //        ListNode getListCurrent = node;
+        //        List<int> getListResult = new List<int> ();
+        //        while (getListCurrent != null)
+        //        {
+        //            getListResult.Add(getListCurrent.val);
+        //            getListCurrent = getListCurrent.next;
+        //        }
+        //        return getListResult;
+        //    }
+        //    List<int> intList1 = getList(list1);
+        //    List<int> intList2 = getList(list2);
+        //    intList1.AddRange(intList2);
+        //    List<int> resultList = intList1.OrderBy(x=>x).ToList();
+        //    ListNode result=new ListNode();
+        //    ListNode current = result;
+        //    for (int i=0;i<resultList.Count;i++)
+        //    {
+        //        current.val = resultList[i];
+        //        if(i+1 != resultList.Count)
+        //           current.next = new ListNode();
+        //        current=current.next;
+        //    }
+        //    return result;
+        //}
+        public ListNode MergeTwoLists(ListNode list1, ListNode list2)
+        {
+            ListNode dummyHead = new ListNode(); 
+            ListNode curr = dummyHead;
+
+            while (list1 != null && list2 != null)
+            {
+                if (list1.val < list2.val)
+                {
+                    curr.next = list1;
+                    list1 = list1.next;
+                }
+                else
+                {
+                    curr.next = list2;
+                    list2 = list2.next;
+                }
+                curr = curr.next; 
+            }
+
+            if (list1 != null)
+            {
+                curr.next = list1;
+            }
+            else
+            {
+                curr.next = list2;
+            }
+
+            return dummyHead.next; 
         }
     }
 }
