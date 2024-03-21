@@ -43,8 +43,34 @@ namespace TestProject
             //head.next.next.next.next = new ListNode(5);
             //var result = RemoveNthFromEnd(head,1);
             //var result = IsValid("(())");
-            var result = MergeTwoLists(new ListNode { val = 1, next = new ListNode { val = 2, next = new ListNode { val = 4, next = null } } }, new ListNode { val = 1, next = new ListNode { val = 3, next = new ListNode { val = 4, next = null } } });
+            //var result = MergeTwoLists(new ListNode { val = 1, next = new ListNode { val = 2, next = new ListNode { val = 4, next = null } } }, new ListNode { val = 1, next = new ListNode { val = 3, next = new ListNode { val = 4, next = null } } });
             //var result = MergeTwoLists(null, null);
+            //var result = GenerateParenthesis(5);
+
+            ListNode[] lists = new ListNode[3];
+
+            //ListNode list1 = new ListNode(1);
+            //list1.next = new ListNode(4);
+            //list1.next.next = new ListNode(5);
+            //lists[0] = list1;
+
+            //ListNode list2 = new ListNode(1);
+            //list2.next = new ListNode(3);
+            //list2.next.next = new ListNode(4);
+            //lists[1] = list2;
+
+            //ListNode list3 = new ListNode(2);
+            //list3.next = new ListNode(6);
+            //lists[2] = list3;
+            ListNode list1 = new ListNode(2);
+            lists[0] = list1;
+
+            ListNode list2 = new ListNode();
+            lists[1] = list2;
+
+            ListNode list3 = new ListNode(-1);
+            lists[2] = list3;
+            var result = MergeKLists(lists);
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1723,6 +1749,133 @@ namespace TestProject
             }
 
             return dummyHead.next; 
+        }
+
+        //22. Generate Parentheses 排出所有括號組合
+        //Medium
+        //Topics
+        //Companies
+        //Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+        //Example 1:
+        //Input: n = 3
+        //Output: ["((()))","(()())","(())()","()(())","()()()"]
+
+        //Example 2:
+        //Input: n = 1
+        //Output: ["()"]
+
+        //Constraints:
+
+        //1 <= n <= 8
+        public IList<string> GenerateParenthesis(int n)
+        {
+            IList<string> result = new List<string>();
+            Backtrack("", n, n, result);
+            return result;
+
+            void Backtrack(string combination, int left, int right, IList<string> response)
+            {
+                // 如果左右括号均已用完，则将当前组合加入结果集中
+                if (left == 0 && right == 0)
+                {
+                    response.Add(combination);
+                    return;
+                }
+
+                // 如果剩余可用左括号数大于 0，则可以添加左括号
+                if (left > 0)
+                {
+                    Backtrack(combination + "(", left - 1, right, response);
+                }
+
+                // 如果剩余可用右括号数大于剩余可用左括号数，则可以添加右括号
+                if (right > left)
+                {
+                    Backtrack(combination + ")", left, right - 1, response);
+                }
+            }
+        }
+
+        //23. Merge k Sorted Lists 多個ListNode合併
+        //Hard
+        //Topics
+        //Companies
+        //You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
+        //Merge all the linked-lists into one sorted linked-list and return it.
+
+        //Example 1:
+        //Input: lists = [[1, 4, 5], [1,3,4], [2,6]]
+        //Output: [1,1,2,3,4,4,5,6]
+        //Explanation: The linked-lists are:
+        //[
+        //  1->4->5,
+        //  1->3->4,
+        //  2->6
+        //]
+        //merging them into one sorted list:
+        //1->1->2->3->4->4->5->6
+
+        //Example 2:
+        //Input: lists = []
+        //Output: []
+
+        //Example 3:
+        //Input: lists = [[]]
+        //Output: []
+
+
+        // Constraints:
+        //k == lists.length
+        //0 <= k <= 104
+        //0 <= lists[i].length <= 500
+        //-104 <= lists[i][j] <= 104
+        //lists[i] is sorted in ascending order.
+        //The sum of lists[i].length will not exceed 104.
+
+        //自解+GPT
+        public ListNode MergeKLists(ListNode[] lists)
+        {
+            ListNode result=null;
+            foreach (var l in lists)
+            {
+                result=MergeTwo(result, l);
+            }
+            return result;
+
+            //兩個合併
+            ListNode MergeTwo(ListNode list1, ListNode list2)
+            {
+                //合併前先判斷
+                if (list1 == null) return list2;
+                if (list2 == null) return list1;
+
+                ListNode dummyHead=new ListNode();
+                ListNode curr = dummyHead;
+                while(list1 != null && list2 != null)
+                {
+                    if(list1.val< list2.val)
+                    {
+                        curr.next = list1;
+                        list1 = list1.next;
+                    }
+                    else
+                    {
+                        curr.next = list2;
+                        list2 = list2.next;
+                    }
+                    curr=curr.next;
+                }
+                if (list1 != null)
+                {
+                    curr.next = list1;
+                }
+                else
+                {
+                    curr.next = list2;
+                }
+                return dummyHead.next;
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using TestProject.Interview;
 
 namespace ConsoleAppTest
 {
@@ -69,33 +70,35 @@ namespace ConsoleAppTest
             //    Console.WriteLine(2);
             //Console.Read();
             // Original request parameters
-            var requestParams = new
-            {
-                loginName = "j7l6testuser",
-                timestamp = "1578662499442"
-            };
+            //var requestParams = new
+            //{
+            //    loginName = "j7l6testuser",
+            //    timestamp = "1578662499442"
+            //};
 
-            // Convert original request parameters to JSON string
-            var requestParamsJson = JsonConvert.SerializeObject(requestParams);
+            //// Convert original request parameters to JSON string
+            //var requestParamsJson = JsonConvert.SerializeObject(requestParams);
 
-            // Encrypt the JSON string
-            var encryptedParams = Encrypt(requestParamsJson);
+            //// Encrypt the JSON string
+            //var encryptedParams = Encrypt(requestParamsJson);
 
-            // Calculate the MD5 hash of the encrypted JSON string
-            var md5Hash = CalculateMD5Hash(encryptedParams);
+            //// Calculate the MD5 hash of the encrypted JSON string
+            //var md5Hash = CalculateMD5Hash(encryptedParams);
 
-            // Create the final JSON object to be sent in the request
-            var finalJson = new
-            {
-                merchantCode = "J7L6",
-                @params = encryptedParams,
-                signature = md5Hash
-            };
+            //// Create the final JSON object to be sent in the request
+            //var finalJson = new
+            //{
+            //    merchantCode = "J7L6",
+            //    @params = encryptedParams,
+            //    signature = md5Hash
+            //};
 
-            // Convert the final JSON object to a string
-            var finalJsonString = JsonConvert.SerializeObject(finalJson);
+            //// Convert the final JSON object to a string
+            //var finalJsonString = JsonConvert.SerializeObject(finalJson);
 
-            Console.WriteLine(finalJsonString);
+            //Console.WriteLine(finalJsonString);
+            EightQueen.QueenFun(4);
+            Console.Read();
         }
         private static string Encrypt(string plainText)
         {
