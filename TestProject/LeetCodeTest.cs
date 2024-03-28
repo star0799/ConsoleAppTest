@@ -15,8 +15,11 @@ namespace TestProject
         [Test]
         public void Main()
         {
+
+            #region TwoSum Tips
             //int[]取出兩個值相加為target最後回傳Index  ex. { 2, 7, 11, 14, 13, 196, 15 } , 26
-            //11+15=26所以回傳2,6
+            //11+15=26所以回傳2,6 
+            #endregion
             //var result = TwoSum(new int[] { 2, 7, 11, 14, 13, 196, 15 }, 26);
             //Merge(new int[] { 1, 2, 3, 0, 0, 0 }, 3, new int[] { 2, 5, 6 }, 3);
             //var result= AddTwoNumbers(new ListNode { val=2,next= new ListNode { val=4,next =new ListNode {val= 3,next=null} } }, new ListNode { val = 5, next = new ListNode { val = 6, next = new ListNode { val = 8, next= new ListNode { val = 9, next = null } } } });
@@ -36,18 +39,20 @@ namespace TestProject
             //var result = ThreeSumClosest(new int[] { -1, 2, 1, -4 },1);
             //var result = LetterCombinations("237");
             //var result = FourSum(new int[] { 1, 0, -1, 0, -2, 2 }, 0);
+            #region RemoveNthFromEnd測試範例
             //ListNode head = new ListNode(1);
             //head.next = new ListNode(2);
             //head.next.next = new ListNode(3);
             //head.next.next.next = new ListNode(4);
             //head.next.next.next.next = new ListNode(5);
-            //var result = RemoveNthFromEnd(head,1);
+            #endregion
+            //var result = RemoveNthFromEnd(head,1); 
             //var result = IsValid("(())");
             //var result = MergeTwoLists(new ListNode { val = 1, next = new ListNode { val = 2, next = new ListNode { val = 4, next = null } } }, new ListNode { val = 1, next = new ListNode { val = 3, next = new ListNode { val = 4, next = null } } });
             //var result = MergeTwoLists(null, null);
             //var result = GenerateParenthesis(5);
-
-            ListNode[] lists = new ListNode[3];
+            #region MergeKLists測試範例
+            //ListNode[] lists = new ListNode[3];
 
             //ListNode list1 = new ListNode(1);
             //list1.next = new ListNode(4);
@@ -62,15 +67,19 @@ namespace TestProject
             //ListNode list3 = new ListNode(2);
             //list3.next = new ListNode(6);
             //lists[2] = list3;
-            ListNode list1 = new ListNode(2);
-            lists[0] = list1;
+            //ListNode list1 = new ListNode(2);
+            //lists[0] = list1;
 
-            ListNode list2 = new ListNode();
-            lists[1] = list2;
+            //ListNode list2 = new ListNode();
+            //lists[1] = list2;
 
-            ListNode list3 = new ListNode(-1);
-            lists[2] = list3;
-            var result = MergeKLists(lists);
+            //ListNode list3 = new ListNode(-1);
+            //lists[2] = list3; 
+            #endregion
+            //var result = MergeKLists(lists);
+            //var result = SwapPairs(new ListNode { val = 2, next = new ListNode { val = 1, next = new ListNode { val = 4, next = new ListNode { val = 3, next = null } } } });
+            //var result = ReverseKGroup(new ListNode { val = 2, next = new ListNode { val = 1, next = new ListNode { val = 4, next = new ListNode { val = 3, next = null } } } },3);
+            var result = RemoveDuplicates2(new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 });
         }
         //1. Two Sum 從陣列裡取出兩個數字相加等於target
         //Solved
@@ -1876,6 +1885,173 @@ namespace TestProject
                 }
                 return dummyHead.next;
             }
+        }
+
+        //24. Swap Nodes in Pairs 兩兩節點交換(他解)
+        //Medium
+        //Topics
+        //Companies
+        //Given a linked list, swap every two adjacent nodes and return its head.You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
+
+        //Example 1:
+        //Input: head = [1, 2, 3, 4]
+        //Output: [2,1,4,3]
+
+        //Example 2:
+        //Input: head = []
+        //Output: []
+
+        //Example 3:
+        //Input: head = [1]
+        //Output: [1]
+
+        //Constraints:
+
+        //The number of nodes in the list is in the range [0, 100].
+        //0 <= Node.val <= 100
+
+        public ListNode SwapPairs(ListNode head)
+        {
+            if (head == null || head.next == null)
+            {
+                return head;
+            }
+
+            ListNode firstNode = head;
+            ListNode secondNode = head.next;
+
+            firstNode.next = SwapPairs(secondNode.next);
+            secondNode.next = firstNode;
+
+            return secondNode;
+        }
+
+        //25. Reverse Nodes in k-Group 依照參數轉換節點個數(他解)
+        //Hard
+        //Topics
+        //Companies
+        //Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
+        //k is a positive integer and is less than or equal to the length of the linked list.If the number of nodes is not a multiple of k then left-out nodes, in the end, should remain as it is.
+        //You may not alter the values in the list's nodes, only nodes themselves may be changed.
+
+        //Example 1:
+        //Input: head = [1,2,3,4,5], k = 2
+        //Output: [2,1,4,3,5]
+
+        //Example 2:
+        //Input: head = [1,2,3,4,5], k = 3
+        //Output: [3,2,1,4,5]
+
+        //Constraints:
+
+        //The number of nodes in the list is n.
+        //1 <= k <= n <= 5000
+        //0 <= Node.val <= 1000
+
+        //Follow-up: Can you solve the problem in O(1) extra memory space?
+        public ListNode ReverseKGroup(ListNode head, int k)
+        {
+            ListNode dummyNode = new ListNode(0, head);
+            ListNode prev = dummyNode, currNode = head;
+            int currLen = 0;
+
+            while (currNode != null)
+            {
+                currLen++;
+
+                if (currLen == k)
+                {
+                    ListNode temp = currNode.next;
+                    ListNode tempTail = prev.next;
+
+                    currNode.next = null;
+                    prev.next = ReverseNodes(prev.next);
+                    tempTail.next = temp;
+                    prev = tempTail;
+                    currNode = prev.next;
+                    currLen = 0;
+                    continue;
+                }
+
+                currNode = currNode.next;
+            }
+
+            return dummyNode.next;
+
+            ListNode ReverseNodes(ListNode node)
+            {
+                ListNode pre = null;
+
+                while (node != null)
+                {
+                    ListNode temp = node.next;
+                    node.next = pre;
+                    pre = node;
+                    node = temp;
+                }
+
+                return pre;
+            }
+        }
+
+        //26. Remove Duplicates from Sorted Array 移除重複且處理陣列 (他解)
+        //Easy
+        //Topics
+        //Companies
+        //Hint
+        //Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once.The relative order of the elements should be kept the same.Then return the number of unique elements in nums.
+
+        //Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:
+
+        //Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially.The remaining elements of nums are not important as well as the size of nums.
+        //Return k.
+        //Custom Judge:
+
+        //The judge will test your solution with the following code:
+
+        //int[] nums = [...]; // Input array
+        //int[] expectedNums = [...]; // The expected answer with correct length
+
+        //int k = removeDuplicates(nums); // Calls your implementation
+
+        //assert k == expectedNums.length;
+        //for (int i = 0; i<k; i++) {
+        //    assert nums[i] == expectedNums[i];
+        //}
+        //    If all assertions pass, then your solution will be accepted.
+
+
+
+        //Example 1:
+        //Input: nums = [1,1,2]
+        //Output: 2, nums = [1,2, _]
+        //Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
+        //It does not matter what you leave beyond the returned k(hence they are underscores).
+
+        //Example 2:
+        //Input: nums = [0,0,1,1,1,2,2,3,3,4]
+        //Output: 5, nums = [0,1,2,3,4, _, _, _, _, _]
+        //Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
+        //It does not matter what you leave beyond the returned k(hence they are underscores).
+
+        //Constraints:
+
+        //1 <= nums.length <= 3 * 104
+        //-100 <= nums[i] <= 100
+        //nums is sorted in non-decreasing order.
+
+        public int RemoveDuplicates(int[] nums)
+        {
+            int j = 1;
+            for(int i = 1; i < nums.Length; i++)
+            {
+                if (nums[i - 1] != nums[i])
+                {
+                    nums[j] = nums[i];
+                    j++;
+                }
+            }
+            return j;
         }
     }
 }
